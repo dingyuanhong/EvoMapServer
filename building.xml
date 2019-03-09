@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Map[]>
+<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" background-color="#b8dee6">
+
+<Parameters>
+  <Parameter name="bounds">-180,-85.05112877980659,180,85.05112877980659</Parameter>
+  <Parameter name="center">0,0,2</Parameter>
+  <Parameter name="format">png24</Parameter>
+  <Parameter name="minzoom">0</Parameter>
+  <Parameter name="maxzoom">22</Parameter>
+  <Parameter name="scale">1</Parameter>
+  <Parameter name="metatile">2</Parameter>
+  <Parameter name="id"><![CDATA[dyh]]></Parameter>
+  <Parameter name="_updated">1550656406000</Parameter>
+  <Parameter name="name"><![CDATA[dyhn]]></Parameter>
+  <Parameter name="description"><![CDATA[dyhd]]></Parameter>
+  <Parameter name="tilejson"><![CDATA[2.0.0]]></Parameter>
+  <Parameter name="scheme"><![CDATA[xyz]]></Parameter>
+</Parameters>
+
+
+<Style name="building" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <Filter>([amenity] = 'place_of_worship')</Filter>
+    <PolygonSymbolizer fill="#ffffff" clip="false" />
+    <LineSymbolizer stroke="#ffff00" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <Filter>([aeroway] = 'terminal')</Filter>
+    <PolygonSymbolizer fill="#ffffff" clip="false" />
+    <LineSymbolizer stroke="#ffff00" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <Filter>([aerialway] = 'station')</Filter>
+    <PolygonSymbolizer fill="#ffffff" clip="false" />
+    <LineSymbolizer stroke="#ffff00" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <Filter>([building] = 'train_station')</Filter>
+    <PolygonSymbolizer fill="#ffffff" clip="false" />
+    <LineSymbolizer stroke="#ffff00" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <Filter>([public_transport] = 'station')</Filter>
+    <PolygonSymbolizer fill="#ffffff" clip="false" />
+    <LineSymbolizer stroke="#ffff00" stroke-width="0" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <PolygonSymbolizer fill="#00ffff" clip="false" />
+    <LineSymbolizer stroke-width="0" />
+  </Rule>
+</Style>
+<Layer name="building"
+  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+    <StyleName>building</StyleName>
+    <Datasource>
+       <Parameter name="type"><![CDATA[postgis]]></Parameter>
+       <Parameter name="table"><![CDATA[(SELECT
+    way,
+    name,
+    building,
+    amenity,
+    aeroway,
+    aerialway,
+    tags->'building:levels' as floor,
+    tags->'public_transport' as public_transport
+  FROM planet_osm_polygon
+  WHERE building IS NOT NULL
+    AND building != 'no'
+    AND way_area > 1*!pixel_width!::real*!pixel_height!::real
+  ORDER BY COALESCE(layer,0), way_area DESC
+) AS building]]></Parameter>
+       <Parameter name="key_field"><![CDATA[]]></Parameter>
+       <Parameter name="geometry_field"><![CDATA[way]]></Parameter>
+       <Parameter name="extent_cache"><![CDATA[auto]]></Parameter>
+       <Parameter name="extent"><![CDATA[-20037508.33,-1753686.6,20037508.34,17380689.94]]></Parameter>
+       <Parameter name="dbname"><![CDATA[gis]]></Parameter>
+    </Datasource>
+  </Layer>
+
+</Map>
